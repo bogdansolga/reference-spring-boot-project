@@ -1,8 +1,6 @@
 # Spring Boot Reference Project
 
-A complete Spring Boot 3.5.6 reference application demonstrating enterprise-grade patterns and best practices for building REST APIs with Spring Framework.
-
-[![Tests](https://github.com/N-iX-GenAI-Value-LAB/spring-reference-project/actions/workflows/test-on-pr.yml/badge.svg)](https://github.com/N-iX-GenAI-Value-LAB/spring-reference-project/actions/workflows/test-on-pr.yml)
+A complete Spring Boot 4.0.0 reference application demonstrating enterprise-grade patterns and best practices for building REST APIs with Spring Framework.
 
 ## Quick Start
 
@@ -20,7 +18,7 @@ mvn clean package
 mvn spring-boot:run
 ```
 
-The application will start on a random port with the H2 in-memory database.
+The application will start with the H2 in-memory database.
 
 ### Run Tests
 
@@ -35,26 +33,26 @@ mvn test -Dtest=ProductControllerTest
 ## Technology Stack
 
 - **Java 21**
-- **Spring Boot 3.5.6**
+- **Spring Boot 4.0.0**
 - **Spring Data JPA** - Data persistence
 - **Spring Security** - Authentication & authorization
 - **H2 Database** - In-memory database
-- **AspectJ** - Cross-cutting concerns (logging, profiling)
-- **TestNG** - Testing framework
-- **REST Assured** - API testing
+- **JUnit 5** - Testing framework
+- **MockMvc** - API testing
 
 ## Project Structure
 
 ```
-src/main/java/com/nix/reference/spring/project/
+src/main/java/com/great/project/
 ├── controller/       # REST API endpoints
 ├── service/          # Business logic
-├── repository/       # Data access layer
-├── domain/model/     # JPA entities
+├── domain/
+│   ├── model/        # JPA entities
+│   └── repository/   # Data access layer
 ├── dto/              # Data transfer objects
 ├── config/           # Spring configuration
-├── security/         # Security configuration
-└── aop/              # Aspect-oriented programming
+├── security/         # Security handlers and filters
+└── errorhandling/    # Exception handlers
 ```
 
 ## API Endpoints
@@ -72,21 +70,16 @@ Base URL: `/v1/api`
 
 The application uses HTTP Basic authentication:
 - **User**: `user` / `password` (role: USER)
-- **Admin**: `admin` / `password` (roles: USER, ADMIN)
+- **Admin**: `admin` / `password` (role: ADMIN)
 
 ## Development
 
 ### Profiles
 
-The application supports multiple profiles:
 - `dev` - Development (default)
 - `prod` - Production
 - `in-memory` - Testing with in-memory database
 
-### Database
-
-H2 console available at runtime for database inspection.
-
 ## Further Information
 
-For detailed architecture information, development guidelines, and advanced patterns used in this project, see [CLAUDE.md](./CLAUDE.md).
+For detailed architecture information and development guidelines, see [CLAUDE.md](./CLAUDE.md).

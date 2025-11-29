@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Spring Boot 4.0.0 reference project demonstrating end-to-end implementation patterns for enterprise applications. It uses Java 21, Spring Data JPA with H2 database, Spring Security, and AspectJ for cross-cutting concerns.
+This is a Spring Boot 4.0.0 reference project demonstrating end-to-end implementation patterns for enterprise applications. It uses Java 21, Spring Data JPA with H2 database, and Spring Security.
 
 **Main Application Entry Point**: `com.great.project.SpringReferenceProject`
 
@@ -18,11 +18,6 @@ mvn clean package
 ### Run the Application
 ```bash
 mvn spring-boot:run
-```
-
-Or run the packaged JAR:
-```bash
-java -jar target/spring-boot-training-1.0-SNAPSHOT.jar
 ```
 
 ### Run Tests
@@ -48,7 +43,7 @@ mvn clean
 The project follows a standard layered architecture:
 - **Controllers** (`controller/`): REST endpoints exposing the API at `/v1/api/*`
 - **Services** (`service/`): Business logic layer with transaction management
-- **Repositories** (`repository/`): Spring Data JPA repositories for data access
+- **Repositories** (`domain/repository/`): Spring Data JPA repositories for data access
 - **Domain Models** (`domain/model/`): JPA entities
 - **DTOs** (`dto/`): Data transfer objects for API contracts
 
@@ -62,26 +57,16 @@ The project follows a standard layered architecture:
 
 **Caching**: The `ProductService.get()` method uses Spring Cache with key `#id`. Cache name is "products".
 
-**AOP & Cross-Cutting Concerns**:
-- Custom profiling annotations: `@ExecutionTimeProfiling` and `@MemoryProfiling`
-- Aspects are defined in `aop/aspect/ProfilingAspect.java` and `aop/aspect/LoggingAspect.java`
-- Configuration: `config/AspectJConfig.java`
-
 ### Security Configuration
 
 Spring Security is configured in `config/SecurityConfiguration.java`:
 - HTTP Basic authentication enabled
 - CSRF disabled, CORS disabled
-- Stateless session management
 - In-memory user store with two users:
   - `user` / `password` (role: USER)
-  - `admin` / `password` (roles: USER, ADMIN)
-- Public endpoints: `/v1/api/auth/**`, `/v1/api/login`, `/register`
+  - `admin` / `password` (role: ADMIN)
+- Public endpoints: `/login`, `/register`, `/favicon.ico`
 - All other endpoints require authentication
-
-**Custom Security Annotations**:
-- `@HasManagerRole`: Custom meta-annotation for role-based access
-- Use `@PreAuthorize`, `@Secured`, or custom annotations for method-level security
 
 ### Domain Model Relationships
 
@@ -114,17 +99,18 @@ Base API path: `/v1/api`
 
 ### Testing Strategy
 
-Tests use **TestNG** (not JUnit) with **REST Assured**:
-- `@SpringBootTest` with `WebEnvironment.RANDOM_PORT`
-- `AbstractTransactionalTestNGSpringContextTests` base class for integration tests
-- REST Assured for API testing with fluent assertions
-- `@DataProvider` for parameterized tests
+Tests use **JUnit 5** with **MockMvc**:
+- `@SpringBootTest` for integration tests
+- `@AutoConfigureMockMvc` for MockMvc injection
+- `@Transactional` for test isolation (rollback after each test)
+- `AbstractProductTest` base class for common test setup
+- `@ParameterizedTest` with `@MethodSource` for data-driven tests
 - `@ActiveProfiles(Profiles.IN_MEMORY)` for test isolation
 
 ### Database Configuration
 
 - **Driver**: H2 in-memory database
-- **URL**: `jdbc:h2:mem:complete-web-project;DB_CLOSE_ON_EXIT=FALSE`
+- **URL**: `jdbc:h2:mem:reference-project;DB_CLOSE_ON_EXIT=FALSE`
 - **Hibernate DDL**: `create-drop` (recreates schema on startup)
 - **JPA open-in-view**: Disabled (explicit transaction boundaries)
 
@@ -133,7 +119,6 @@ Tests use **TestNG** (not JUnit) with **REST Assured**:
 - SLF4J with Logback
 - Custom console pattern in `application.yml`
 - Default log level: INFO
-- Hibernate SQL logging: Disabled by default (can be enabled by changing `hibernate.sql` to `debug`)
 
 ## Important Conventions
 
