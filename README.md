@@ -80,6 +80,11 @@ The application uses HTTP Basic authentication:
 - `prod` - Production
 - `in-memory` - Testing with in-memory database
 
+## Training Exercises
+
+- [AI for Coding](docs/ai-for-coding.md) - Using AI to develop software (prompts from IDE/CLI)
+- [AI in Apps](docs/ai-in-apps.md) - Using AI in software (API integrations)
+
 ## Further Information
 
 For detailed architecture information and development guidelines, see [CLAUDE.md](./CLAUDE.md).
